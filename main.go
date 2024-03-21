@@ -1,15 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"net/http"
+	"github.com/gin-gonic/gin"
+	//"errors"
+)
 
-func main() {
-	var name string = "Pativeth"
-	var age int = 25
-	var score float32 = 98.5
-	var isPass bool = true
-	fmt.Println("My name is ",name)
-	fmt.Println("Age = ",age)
-	fmt.Println("Score ",score)
-	fmt.Println("Pass Exam ",isPass)
+type book struct {
+	ID string `json:"id"`
+	Title string `json:"title"`
+	Author string `json:"author"`
+	Quantity int `json:"quantity"`
 }
 
+var books = []book{
+	{ID: "1", Title: "In Search of Lost Time", Author: "Marcel", Quantity: 2},
+	{ID: "2", Title: "Text 2", Author: "Author 2", Quantity: 4},
+	{ID: "3", Title: "Text 3", Author: "Author 3", Quantity: 5},
+}
+
+func getBooks(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, books)
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/books", getBooks)
+	router.Run("localhost:8080")
+}
